@@ -7,7 +7,7 @@ import javax.ws.rs.core.MediaType;
 public class Posts {
 
     @POST
-    @Path("post")
+    @Path("form1")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
     public String postMethod(@FormParam("name") String name) {
