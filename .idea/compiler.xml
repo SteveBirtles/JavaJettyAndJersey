@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="JavaJettyAndJersey" target="1.5" />
+      <module name="JavaJettyAndJersey" target="1.8" />
       <module name="JJ1" target="1.5" />
     </bytecodeTargetLevel>
   </component>
