@@ -10,60 +10,39 @@ import java.util.List;
 public class ClientController {
 
     @GET
-    @Path("img/{path: .*}")
+    @Path("img/{path}")
     @Produces({"image/jpeg,image/png"})
-    public byte[] getImageFile(@PathParam("path") List<PathSegment> path) {
-        return getFile(getFilename("/img", path));
+    public byte[] getImageFile(@PathParam("path") String path) {
+        return getFile("client/img/" + path);
     }
 
     @GET
-    @Path("js/{path: .*}")
+    @Path("js/{path}")
     @Produces({"text/javascript"})
-    public byte[] getJavaScriptFile(@PathParam("path") List<PathSegment> path) {
-        String filename = getFilename("/js", path);
-        if (filename.substring(filename.length() - 4, filename.length()).equals(".map")) {
-            System.out.println("Ignoring JS map file: " + filename);
-            return null;
-        }
-        return getFile(filename);
+    public byte[] getJavaScriptFile(@PathParam("path") String path) {
+        return getFile("client/js/" + path);
     }
 
     @GET
-    @Path("css/{path: .*}")
+    @Path("css/{path}")
     @Produces({"text/css"})
-    public byte[] getCSSFile(@PathParam("path") List<PathSegment> path) {
-        String filename = getFilename("/css", path);
-        if (filename.substring(filename.length() - 4, filename.length()).equals(".map")) {
-            System.out.println("Ignoring CSS map file: " + filename);
-            return null;
-        }
-        return getFile(filename);
+    public byte[] getCSSFile(@PathParam("path") String path) {
+        return getFile("client/css/" + path);
     }
 
     @GET
-    @Path("{path: .*}")
+    @Path("{path}")
     @Produces({"text/html"})
-    public byte[] getIHTMLFile(@PathParam("path") List<PathSegment> path) {
-        return getFile(getFilename("", path));
-    }
-
-    private String getFilename(String topPath, List<PathSegment> path)
-    {
-        StringBuilder filename = new StringBuilder("client" + topPath);
-        for (PathSegment p : path) {
-            filename.append("/").append(p.toString());
-        }
-        return filename.toString();
+    public byte[] getIHTMLFile(@PathParam("path") String path) {
+        return getFile("client/" + path);
     }
 
     private byte[] getFile(String filename) {
-
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            URL fileURL = classLoader.getResource("" + filename);
+            URL fileURL = classLoader.getResource(filename);
             if (fileURL == null) {
                 System.out.println("Error: Unable to send " + filename);
-                return null;
             } else {
                 File file = new File(fileURL.getFile());
                 byte[] fileData = new byte[(int) file.length()];

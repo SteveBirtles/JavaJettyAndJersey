@@ -1,6 +1,6 @@
 $(function() {
 
-    let url = 'http://localhost:8081/cookie/list';
+    let url = 'http://localhost:8081/hello';
 
     console.log('Hello...');
 
