@@ -1,10 +1,10 @@
 package server.Controllers;
 
+import server.Console;
+
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
 import java.io.*;
 import java.net.URL;
-import java.util.List;
 
 @Path("client/")
 public class ClientController {
@@ -42,18 +42,18 @@ public class ClientController {
             ClassLoader classLoader = getClass().getClassLoader();
             URL fileURL = classLoader.getResource(filename);
             if (fileURL == null) {
-                System.out.println("Error: Unable to send " + filename);
+                Console.log("Error, unable to send: " + filename);
             } else {
                 File file = new File(fileURL.getFile());
                 byte[] fileData = new byte[(int) file.length()];
                 DataInputStream dis = new DataInputStream(new FileInputStream(file));
                 dis.readFully(fileData);
                 dis.close();
-                System.out.println("Sending: " + filename);
+                Console.log("Sending: " + filename);
                 return fileData;
             }
         } catch (IOException ioe) {
-            System.out.println("File IO error: " + ioe.getMessage());
+            Console.log("File IO error: " + ioe.getMessage());
         }
         return null;
     }
