@@ -19,7 +19,7 @@
     </build>
     <packaging>jar</packaging>
 
-  <name>JavaJettyAndJersey</name>
+  <name>WebDev1</name>
   <url>http://maven.apache.org</url>
 
   <properties>

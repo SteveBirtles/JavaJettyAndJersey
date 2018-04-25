@@ -1,8 +1,5 @@
-$(function() {
-
-    const url = 'http://localhost:8081/api/test';
-
-    $.getJSON(url).done(function(data) {
+function reload() {
+    $.getJSON('http://localhost:8081/api/test').done(function(data) {
 
         let content = '';
         for (let fruit of data) {
@@ -17,5 +14,24 @@ $(function() {
         });
 
     });
+}
+
+$(function() {
+
+    reload();
+
+    $('#fruit_form').submit(function(e){
+        e.preventDefault();
+
+        $.ajax({
+                url: 'http://localhost:8081/api/fruitform',
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                data: {'new_fruit': $('#new_fruit').val()},
+                success: function(data) {
+                    reload();
+                }});
+    });
+
 
 });
