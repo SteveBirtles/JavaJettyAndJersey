@@ -13,15 +13,30 @@
         <script src="/client/js/index.js"></script>
 
         <link href="/client/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/client/css/site.css" rel="stylesheet">
 
     </head>
 
-    <body>
+    <body class="bg-dark">
 
-        <img src="/client/img/nebula.jpg">
+        <div class="container bg-light p-3">
 
-        <div id="test-target">
+            <div class="alert alert-primary text-center">
+                <h1>Welcome to my list of fruits!</h1>
+            </div>
+
+            <div id="test-target"></div>
+
+            <div class="p-3">
+
+                <form>
+                    <div class="form-group">
+                        <label for="newfruit">Fruit name</label>
+                        <input class="form-control" id="newfruit">
+                    </div>
+                    <button class="btn btn-success">Add</button>
+                </form>
+
+            </div>
 
         </div>
 
