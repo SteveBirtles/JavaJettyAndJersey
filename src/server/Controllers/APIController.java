@@ -3,6 +3,8 @@ package server.Controllers;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.Console;
+import server.Model.Fruit;
+import server.ServerStart;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -13,13 +15,6 @@ import java.util.Arrays;
 @SuppressWarnings("unchecked")
 public class APIController {
 
-    private ArrayList<String> fruits = new ArrayList<>(Arrays.asList(
-            "Apple", "Apricot", "Banana", "Blackberry", "Blackcurrant", "Blueberry", "Cherry",
-            "Clementine", "Cranberry", "Date", "Dragonfruit", "Elderberry", "Fig",
-            "Gooseberry", "Grape", "Grapefruit", "Guava", "Kiwifruit", "Kumquat",
-            "Lemon", "Lime", "Lychee", "Mandarine", "Mango", "Melon", "Nectarine",
-            "Orange", "Papaya", "Passionfruit", "Peach", "Pear", "Plum", "Pineapple",
-            "Pomegranate", "Raspberry", "Redcurrant", "Starfruit", "Strawberry", "Tangerine"));
 
     @GET
     @Path("test")
@@ -30,7 +25,7 @@ public class APIController {
 
         JSONArray fruitList = new JSONArray();
 
-        for (String fruitName : fruits) {
+        for (String fruitName : Fruit.allFruits) {
             JSONObject nextFruit = new JSONObject();
             nextFruit.put("name", fruitName);
             fruitList.add(nextFruit);
@@ -47,7 +42,7 @@ public class APIController {
     @Produces(MediaType.TEXT_PLAIN)
     public String postMethod(@FormParam("new_fruit") String newfruit) {
         System.out.println("POST Request received with form data new_fruit=" + newfruit);
-        fruits.add(newfruit);
+        Fruit.allFruits.add(newfruit);
         return "OK";
     }
 

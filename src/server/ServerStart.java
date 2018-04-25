@@ -6,7 +6,11 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class ServerStart {
+
     public static void main(String[] args) {
 
         ResourceConfig config = new ResourceConfig();
