@@ -17,7 +17,7 @@ public class APIController {
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
     public String apiTest() {
-        Console.log("API GET Request received on path 'list'...");
+        Console.log("GET Request received to list messages.");
         SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         JSONArray messageList = new JSONArray();
         for (Message m : Message.allMessages) {
@@ -36,7 +36,7 @@ public class APIController {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     public String addMessage(@FormParam("new_message") String newMessage, @FormParam("new_author") String newAuthor) {
-        Console.log("POST Request received with form data new_message=" + newMessage + ", new_author=" + newAuthor);
+        Console.log("POST Request received with new_message=" + newMessage + ", new_author=" + newAuthor);
         Message.allMessages.add(new Message(newMessage, newAuthor));
         return "OK";
     }
@@ -46,7 +46,7 @@ public class APIController {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     public String removeMessage(@FormParam("old_message_id") int oldMessageId) {
-        Console.log("POST Request received with form data old_message_id=" + oldMessageId);
+        Console.log("POST Request received with old_message_id=" + oldMessageId);
         Message oldMessage = null;
         for (Message m: Message.allMessages) {
             if (oldMessageId == m.getId()) {
@@ -55,7 +55,7 @@ public class APIController {
             }
         }
         if (oldMessage == null) {
-            return "That message doesn't appear to exist";
+            return "That message doesn't appear to exist anymore";
         } else {
             Message.allMessages.remove(oldMessage);
             return "OK";

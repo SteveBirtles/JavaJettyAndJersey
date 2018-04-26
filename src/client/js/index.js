@@ -45,7 +45,6 @@ $(function() {
     reload();
 
     let last_author = Cookies.get('last_author');
-
     if (last_author !== undefined) {
         $('input[name=new_author]').val(last_author);
     }
@@ -59,17 +58,11 @@ $(function() {
             data: $(this).serialize(),
             success: function (response) {
                 if (response === 'OK') {
-
                     reload();
-
                     $('input[name=new_message]').val("").focus();
-
                     Cookies.set('last_author', $('input[name=new_author]').val());
-
                 } else {
-
                     alert(response);
-
                 }
             }
         });
