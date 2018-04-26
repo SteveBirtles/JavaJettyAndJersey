@@ -9,6 +9,7 @@
         <script src="/client/js/jquery-3.3.1.min.js"></script>
         <script src="/client/js/popper.min.js"></script>
         <script src="/client/js/bootstrap.min.js"></script>
+        <script src="/client/js/js.cookie.min.js"></script>
 
         <script src="/client/js/index.js"></script>
 
@@ -21,19 +22,27 @@
         <div class="container bg-light p-3">
 
             <div class="alert alert-primary text-center">
-                <h1>Welcome to my list of fruits!</h1>
+                <h1>Welcome to my message board!</h1>
             </div>
 
             <div id="test-target"></div>
 
-            <div class="p-3">
+            <div class="container p-3">
 
-                <form id="fruit_form">
-                    <div class="form-group">
-                        <label for="new_fruit">Fruit name</label>
-                        <input class="form-control" id="new_fruit">
+                <form id="message_form" class="needs-validation">
+                    <div class="form-group form-row">
+                        <div class="col-8">
+                            <label class="w-100">Message<input class="form-control input-lg" name="new_message" required />
+                            </label>
+                        </div>
+                        <div class="col-3">
+                            <label class="w-100">Author<input class="form-control" name="new_author" required />
+                            </label>
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btn-success mt-4">Post</button>
+                        </div>
                     </div>
-                    <button class="btn btn-success">Add</button>
                 </form>
 
             </div>

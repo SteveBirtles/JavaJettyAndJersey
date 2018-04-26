@@ -3,47 +3,63 @@ package server.Controllers;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.Console;
-import server.Model.Fruit;
-import server.ServerStart;
+import server.Model.Message;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
 
-@Path("api/")
+@Path("api/message/")
 @SuppressWarnings("unchecked")
 public class APIController {
 
-
     @GET
-    @Path("test")
+    @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
     public String apiTest() {
-
-        Console.log("API GET Request received on path 'test'...");
-
-        JSONArray fruitList = new JSONArray();
-
-        for (String fruitName : Fruit.allFruits) {
-            JSONObject nextFruit = new JSONObject();
-            nextFruit.put("name", fruitName);
-            fruitList.add(nextFruit);
+        Console.log("API GET Request received on path 'list'...");
+        SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        JSONArray messageList = new JSONArray();
+        for (Message m : Message.allMessages) {
+            JSONObject nextMessage = new JSONObject();
+            nextMessage.put("id", m.getId());
+            nextMessage.put("name", m.getText());
+            nextMessage.put("postdate", simpleDate.format(m.getPostDate()));
+            nextMessage.put("author", m.getAuthor());
+            messageList.add(nextMessage);
         }
-
-        return fruitList.toString();
-
+        return messageList.toString();
     }
 
     @POST
-    @Path("fruitform")
-    //@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("add")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
-    public String postMethod(@FormParam("new_fruit") String newfruit) {
-        System.out.println("POST Request received with form data new_fruit=" + newfruit);
-        Fruit.allFruits.add(newfruit);
+    public String addMessage(@FormParam("new_message") String newMessage, @FormParam("new_author") String newAuthor) {
+        Console.log("POST Request received with form data new_message=" + newMessage + ", new_author=" + newAuthor);
+        Message.allMessages.add(new Message(newMessage, newAuthor));
         return "OK";
+    }
+
+    @POST
+    @Path("remove")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String removeMessage(@FormParam("old_message_id") int oldMessageId) {
+        Console.log("POST Request received with form data old_message_id=" + oldMessageId);
+        Message oldMessage = null;
+        for (Message m: Message.allMessages) {
+            if (oldMessageId == m.getId()) {
+                oldMessage = m;
+                break;
+            }
+        }
+        if (oldMessage == null) {
+            return "That message doesn't appear to exist";
+        } else {
+            Message.allMessages.remove(oldMessage);
+            return "OK";
+        }
     }
 
 }

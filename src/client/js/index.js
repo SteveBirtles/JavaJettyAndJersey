@@ -1,19 +1,42 @@
 function reload() {
-    $.getJSON('http://localhost:8081/api/test').done(function(data) {
 
-        let content = '<ul>';
-        for (let fruit of data) {
-            content += '<span class="badge badge-primary p-2 m-2">' + fruit.name +
-                '<button class="delete_fruit btn btn-sm btn-danger ml-2"> x</button></span>';
+    $.ajax({
+        url: '/api/message/list',
+        type: 'GET',
+        success: function (data) {
+
+            let content = '';
+            for (let message of data) {
+                content += `<div class="border border-primary p-2 m-2">` +
+                                `<div>` +
+                                    `<span class="badge badge-primary mr-2">${message.author}</span>` +
+                                    `<span class="badge badge-info">${message.postdate}</span>` +
+                                    `<button class="delete_message btn btn-sm btn-danger float-right" data-message-id="${message.id}">x</button>` +
+                                `</div>` +
+                                `<div class="py-2 mx-2">${message.name}</div>` +
+                           `</div>`;
+            }
+
+            $('#test-target').html(content);
+
+            $('.delete_message').click(function () {
+
+                $.ajax({
+                    url: '/api/message/remove',
+                    type: 'POST',
+                    data: {'old_message_id': $(this).attr('data-message-id')},
+                    success: function (response) {
+                        if (response === 'OK') {
+                            reload();
+                        } else {
+                            alert(response);
+                        }
+                    }
+                });
+
+            });
 
         }
-
-        $('#test-target').html(content);
-
-        $(".delete_fruit").click(function() {
-            $(this).parent().addClass("bg-danger");
-        });
-
     });
 }
 
@@ -21,18 +44,35 @@ $(function() {
 
     reload();
 
-    $('#fruit_form').submit(function(e){
-        e.preventDefault();
+    let last_author = Cookies.get('last_author');
+
+    if (last_author !== undefined) {
+        $('input[name=new_author]').val(last_author);
+    }
+
+    $('#message_form').submit(function(event){
+        event.preventDefault();
 
         $.ajax({
-                url: 'http://localhost:8081/api/fruitform',
-                type: 'POST',
-                contentType: 'application/x-www-form-urlencoded',
-                data: {'new_fruit': $('#new_fruit').val()},
-                success: function(data) {
-                    reload();
-                }});
-    });
+            url: '/api/message/add',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response === 'OK') {
 
+                    reload();
+
+                    $('input[name=new_message]').val("").focus();
+
+                    Cookies.set('last_author', $('input[name=new_author]').val());
+
+                } else {
+
+                    alert(response);
+
+                }
+            }
+        });
+    });
 
 });
