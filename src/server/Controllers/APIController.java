@@ -17,14 +17,12 @@ public class APIController {
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
     public String apiTest() {
-        Console.log("GET Request received to list messages.");
-        SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         JSONArray messageList = new JSONArray();
         for (Message m : Message.allMessages) {
             JSONObject nextMessage = new JSONObject();
             nextMessage.put("id", m.getId());
             nextMessage.put("name", m.getText());
-            nextMessage.put("postdate", simpleDate.format(m.getPostDate()));
+            nextMessage.put("postdate", m.getPostDate());
             nextMessage.put("author", m.getAuthor());
             messageList.add(nextMessage);
         }
