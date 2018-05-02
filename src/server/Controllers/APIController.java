@@ -11,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 @Path("api/message/")
 @SuppressWarnings("unchecked")
@@ -19,7 +20,7 @@ public class APIController {
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
-    public String apiTest() {
+    public String listMessages() {
         JSONArray messageList = new JSONArray();
 
         ArrayList<Message> allMessages = new ArrayList<>();
@@ -29,7 +30,7 @@ public class APIController {
         for (Message m : allMessages) {
             JSONObject nextMessage = new JSONObject();
             nextMessage.put("id", m.getId());
-            nextMessage.put("name", m.getText());
+            nextMessage.put("text", m.getText());
             nextMessage.put("postdate", m.getPostDate());
             nextMessage.put("author", m.getAuthor());
             messageList.add(nextMessage);
@@ -42,6 +43,7 @@ public class APIController {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     public String addMessage(@FormParam("new_message") String newMessage, @FormParam("new_author") String newAuthor) {
+
         Console.log("POST Request received with new_message=" + newMessage + ", new_author=" + newAuthor);
         MessageService.save(new Message(0, newMessage, null, newAuthor), ServerStart.database);
         return "OK";

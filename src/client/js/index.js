@@ -13,7 +13,7 @@ function reload() {
                                     `<span class="badge badge-info">${message.postdate}</span>` +
                                     `<button class="delete_message btn btn-sm btn-danger float-right" data-message-id="${message.id}">x</button>` +
                                 `</div>` +
-                                `<div class="py-2 mx-2">${message.name}</div>` +
+                                `<div class="py-2 mx-2">${message.text}</div>` +
                            `</div>`;
             }
 
@@ -36,6 +36,8 @@ function reload() {
 
             });
 
+            $('#message_form_submit').prop('disabled', false);
+
         }
     });
 }
@@ -44,13 +46,18 @@ $(function() {
 
     reload();
 
+    setInterval(function(){ reload(); }, 2500);
+
     let last_author = Cookies.get('last_author');
     if (last_author !== undefined) {
         $('input[name=new_author]').val(last_author);
     }
 
     $('#message_form').submit(function(event){
+
         event.preventDefault();
+
+        $('#message_form_submit').prop('disabled', true);
 
         $.ajax({
             url: '/api/message/add',
