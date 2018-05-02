@@ -6,7 +6,6 @@ import java.util.Date;
 
 public class Message {
 
-    public static ArrayList<Message> allMessages = new ArrayList<>();
     private static int LAST_ID = 0;
 
     private int id;
@@ -15,11 +14,11 @@ public class Message {
     private String author;
 
     public Message(int id, String text, String postDate, String author) {
-        if (id > LAST_ID) {
-            LAST_ID = id;
-        } else {
+        if (id == 0) {
             LAST_ID++;
             id = LAST_ID;
+        } else if (id > LAST_ID) {
+            LAST_ID = id;
         }
         this.id = id;
         this.text = text;

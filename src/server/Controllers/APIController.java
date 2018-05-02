@@ -4,10 +4,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.Console;
 import server.Model.Message;
+import server.Model.MessageService;
+import server.ServerStart;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 @Path("api/message/")
 @SuppressWarnings("unchecked")
@@ -18,7 +21,12 @@ public class APIController {
     @Produces(MediaType.APPLICATION_JSON)
     public String apiTest() {
         JSONArray messageList = new JSONArray();
-        for (Message m : Message.allMessages) {
+
+        ArrayList<Message> allMessages = new ArrayList<>();
+
+        MessageService.selectAll(allMessages, ServerStart.database);
+
+        for (Message m : allMessages) {
             JSONObject nextMessage = new JSONObject();
             nextMessage.put("id", m.getId());
             nextMessage.put("name", m.getText());
@@ -35,7 +43,7 @@ public class APIController {
     @Produces(MediaType.TEXT_PLAIN)
     public String addMessage(@FormParam("new_message") String newMessage, @FormParam("new_author") String newAuthor) {
         Console.log("POST Request received with new_message=" + newMessage + ", new_author=" + newAuthor);
-        Message.allMessages.add(new Message(newMessage, newAuthor));
+        MessageService.save(new Message(0, newMessage, null, newAuthor), ServerStart.database);
         return "OK";
     }
 
@@ -45,17 +53,12 @@ public class APIController {
     @Produces(MediaType.TEXT_PLAIN)
     public String removeMessage(@FormParam("old_message_id") int oldMessageId) {
         Console.log("POST Request received with old_message_id=" + oldMessageId);
-        Message oldMessage = null;
-        for (Message m: Message.allMessages) {
-            if (oldMessageId == m.getId()) {
-                oldMessage = m;
-                break;
-            }
-        }
+        Message oldMessage = MessageService.selectById(oldMessageId, ServerStart.database);
+
         if (oldMessage == null) {
             return "That message doesn't appear to exist anymore";
         } else {
-            Message.allMessages.remove(oldMessage);
+            MessageService.deleteById(oldMessageId, ServerStart.database);
             return "OK";
         }
     }
